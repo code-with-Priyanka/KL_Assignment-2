@@ -4,8 +4,12 @@ from pymongo import MongoClient
 from pydantic import BaseModel
 
 app = FastAPI()
-
-client = MongoClient("mongodb://intern_23:intern%40123@192.168.0.220:2717/interns_b2_23")
+try:
+    client = MongoClient("mongodb://intern_23:intern%40123@192.168.0.220:2717/interns_b2_23")
+    print("Connected to database")
+except Exception as e:
+     print(e.args)  
+  
 db = client['interns_b2_23']
 lib = db['priyanka_sh']
 
@@ -14,7 +18,6 @@ class Student(BaseModel):
     registration_no: int
     course_id: int
     course_name: str
-
 
 # Create a new book
 @app.post("/add/")
@@ -47,5 +50,6 @@ def delete(id:int):
     result = lib.delete_one({'registration_no':id})
     print(result)
     return {"message": "Student record deleted successfully"}
+
 
 
